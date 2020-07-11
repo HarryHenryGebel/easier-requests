@@ -85,7 +85,7 @@ class Requester {
     delete this.inFlightRequests[id];
   }
 }
-const cache = new ResponseHolder();
+export const requester = new Requester();
 
 // TODO create errors that the documentation falsely claims will be
 // thrown on invalid requests IDs (and throw the errors).
