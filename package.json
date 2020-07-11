@@ -1,0 +1,27 @@
+{
+  "name": "easier-requests",
+  "version": "0.0.0",
+  "description": "Package to make it easier to write simple networking code. Targeted towards students and hobbyists, but hopefully useful to anyone.",
+  "main": "easier-requests.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HarryHenryGebel/easier-requests.git"
+  },
+  "keywords": [
+    "axios",
+    "http"
+  ],
+  "author": "Harry Henry Gebel <hhgebel@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/HarryHenryGebel/easier-requests/issues"
+  },
+  "homepage": "https://harryhenrygebel.github.io/easier-requests/",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "jest": "^26.1.0"
+  }
+}
