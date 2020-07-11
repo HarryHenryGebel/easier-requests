@@ -20,8 +20,10 @@
     "url": "https://github.com/HarryHenryGebel/easier-requests/issues"
   },
   "homepage": "https://harryhenrygebel.github.io/easier-requests/",
-  "dependencies": {
-    "axios": "^0.19.2",
+  "devDependencies": {
     "jest": "^26.1.0"
+  },
+  "dependencies": {
+    "axios": "^0.19.2"
   }
 }
