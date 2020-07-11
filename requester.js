@@ -24,7 +24,7 @@ class Requester {
   constructor() {
     // holds responses awaiting retrieval
     this.cachedResponses = {};
-    this.errors = {};
+    this.cachedErrors = {};
 
     // in flight request IDs
     this.inFlightRequests = {};
@@ -47,7 +47,11 @@ class Requester {
    * to prevent a memory leak on long running apps.
    */
   response(id) {
+    if (this.cachedResponses[id] === undefined)
+      // do not delete until the error is retrieved
+      return undefined;
     const response = this.cachedResponses[id];
+    delete this.cachedErrors[id];
     delete this.cachedResponses[id];
     return response;
   }
@@ -60,17 +64,21 @@ class Requester {
    * @since 0.0.0
    * @param {string} url - URL of resource to be requested
    * @param {string} id - Unique ID used to refer to request and response
-   * @throws {IDExists} Thrown when a requested ID is already in use.
+   * @throws {IDInUse} Thrown when a requested ID is already in use.
    */
   async httpGet(url, id) {
     // cache id with promise
     this.inFlightRequests[id] = axios.get(url)
-      .then(response => this.cachedResponses[id] = response)
+    // on success, set error to undefined, on failure set response to
+    // undefined
+      .then(function (response) {
+        this.cachedResponses[id] = response;
+        this.cachedErrors[id] = undefined;
+      })
       .catch(function (error) {
         this.cachedResponses[id] = undefined;
-        this.errors[id] = error;
+        this.cachedErrors[id] = error;
       });
-
     await this.inFlightRequests[id];
 
     // get rid of cached ID since we are no longer in flight
@@ -82,4 +90,4 @@ const cache = new ResponseHolder();
 // TODO create errors that the documentation falsely claims will be
 // thrown on invalid requests IDs (and throw the errors).
 
-//  LocalWords:  RequestNotComplete InvalidRequest
+//  LocalWords:  RequestNotComplete InvalidRequest IDInUse
