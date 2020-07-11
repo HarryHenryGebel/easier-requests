@@ -1,14 +1,26 @@
 /**
- * @file Project JavaScript file
+ * @file provide the requester class
  * @author Harry Henry Gebel <hhgebel@gmail.com>
  * @copyright 2020 Harry Henry Gebel
  * @license MIT
  * @version 0.0.0
  * @module easier-requests
+ * @since 0.0.0
  */
 'use strict';
 
-class ResponseHolder {
+import axios from 'axios';
+
+/**
+ * Class representing actions to perform HTTP requests and cache their
+ * responses for later retrieval.
+ * @since 0.0.0
+ */
+class Requester {
+  /**
+   * Create a Requester
+   * @since 0.0.0
+   */
   constructor() {
     // holds responses awaiting retrieval
     this.cachedResponses = {};
@@ -16,6 +28,20 @@ class ResponseHolder {
   }
 
   // retrieve a response from cache
+  /**
+   * Retrieve a response based on it's ID
+   * @since 0.0.0
+   * @param {string} id - The ID passed into the HTTP request when it
+   * was created
+   * @return {Object} The response returned. Will be set to undefined
+   * if the request failed.
+   * @throws {RequestNotComplete} Thrown when a response is requested
+   * from an in-flight request.
+   * @throws {InvalidRequest} Thrown when an ID does not exist. Caused
+   * by a request never being made or already having been
+   * retrieved. Retrieved requests are deleted from the cache
+   * to prevent a memory leak on long running apps.
+   */
   response(id) {
     const response = this.cachedResponses[id];
     delete this.cachedResponses[id];
@@ -23,6 +49,14 @@ class ResponseHolder {
   }
 
   // perform an HTTP GET and cache the response
+  /**
+   * perform an HTTP request and cache response
+   * @async
+   * @since 0.0.0
+   * @param {string} url - URL of resource to be requested
+   * @param {string} id - Unique ID used to refer to request and response
+   * @throws {IDExists} Thrown when a requested ID is already in use.
+   */
   async httpGet(url, id) {
     await axios.get(url)
       .then(response => this.cachedResponses[id] = response)
