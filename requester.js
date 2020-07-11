@@ -69,6 +69,57 @@ class Requester {
   }
 
   /**
+   * Check if an ID is invalid or in-flight and throw any appropriate
+   * errors.
+   * @private
+   * @since 0.0.1
+   * @param {string} id - Id to check for errors
+   * @throws {RequestNotCompleteError} Thrown when a response is requested
+   * from an in-flight request.
+   * @throws {InvalidRequestError} Thrown when an ID does not exist. Caused
+   * by a request never being made or already having been
+   * retrieved. Retrieved requests are deleted from the cache
+   * to prevent a memory leak on long running apps.
+   */
+  _responseErrorChecker(id) {
+    if (id in this.inFlightRequests)
+      throw new RequestNotCompleteError(
+        `Request with ID ${id} has not completed.`);
+    if (!(id in this.cachedResponses) && !(id in this.inFlightRequests))
+      throw new InvalidRequestError(
+        `Request with ID ${id}` +
+          ' has already been retrieved or was never created.');
+  }
+
+  /**
+   * Retrieve an error based on it's ID
+   * @since 0.0.1
+   * @param {string} id - The ID passed into the HTTP request when it
+   * was created
+   * @return {Object} The error returned. Will be set to undefined
+   * if the request succeeded.
+   * @throws {RequestNotCompleteError} Thrown when a response is requested
+   * from an in-flight request.
+   * @throws {InvalidRequestError} Thrown when an ID does not exist. Caused
+   * by a request never being made or already having been
+   * retrieved. Retrieved requests are deleted from the cache
+   * to prevent a memory leak on long running apps.
+   */
+  error(id) {
+    // check for errors
+    this._responseErrorChecker(id);
+
+    if (this.cachedErrors[id] === undefined)
+      // do not delete until the response is retrieved
+      return undefined;
+
+    const errorReturned = this.cachedErrors[id];
+    delete this.cachedErrors[id];
+    delete this.cachedResponses[id];
+    return errorReturned;
+  }
+
+  /**
    * Retrieve a response based on it's ID
    * @since 0.0.0
    * @param {string} id - The ID passed into the HTTP request when it
@@ -83,17 +134,14 @@ class Requester {
    * to prevent a memory leak on long running apps.
    */
   response(id) {
-    if (id in this.inFlightRequests)
-      throw new RequestNotCompleteError(
-        `Request with ID ${id} has not completed.`);
-    if (!(id in this.cachedResponses) && !(id in this.inFlightRequests))
-      throw new InvalidRequestError(
-        `Request with ID ${id}` +
-          ' has already been retrieved or was never created.');
+    // check for errors
+    this._responseErrorChecker(id);
+
 
     if (this.cachedResponses[id] === undefined)
       // do not delete until the error is retrieved
       return undefined;
+
     const response = this.cachedResponses[id];
     delete this.cachedErrors[id];
     delete this.cachedResponses[id];
