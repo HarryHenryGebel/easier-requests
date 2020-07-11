@@ -10,7 +10,9 @@
 'use strict';
 
 import axios from 'axios';
-import IDInUseError from 'error';
+import {IDInUseError,
+        RequestNotCompleteError,
+        InvalidRequestError} from 'error';
 
 /**
  * Class representing actions to perform HTTP requests and cache their
@@ -75,7 +77,7 @@ class Requester {
    * if the request failed.
    * @throws {RequestNotCompleteError} Thrown when a response is requested
    * from an in-flight request.
-   * @throws {InvalidRequest} Thrown when an ID does not exist. Caused
+   * @throws {InvalidRequestError} Thrown when an ID does not exist. Caused
    * by a request never being made or already having been
    * retrieved. Retrieved requests are deleted from the cache
    * to prevent a memory leak on long running apps.
@@ -84,6 +86,10 @@ class Requester {
     if (id in this.inFlightRequests)
       throw new RequestNotCompleteError(
         `Request with ID ${id} has not completed.`);
+    if (!(id in this.cachedResponses) && !(id in this.inFlightRequests))
+      throw new InvalidRequestError(
+        `Request with ID ${id}` +
+          ' has already been retrieved or was never created.');
 
     if (this.cachedResponses[id] === undefined)
       // do not delete until the error is retrieved
@@ -114,4 +120,4 @@ export const requester = new Requester();
 // TODO create errors that the documentation falsely claims will be
 // thrown on invalid requests IDs (and throw the errors).
 
-//  LocalWords:  RequestNotCompleteError InvalidRequest IDInUseError
+//  LocalWords:  RequestNotCompleteError InvalidRequestError IDInUseError
