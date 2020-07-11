@@ -7,13 +7,13 @@
 
 ** New features
 + New module =errors.js= to hold error classes.
-+ New Error class ~IDInUseError~
-+ New Error class ~InvalidRequestError~
-+ New Error class ~RequestNotCompleteError~
++ New ~Error~ class ~IDInUseError~
++ New ~Error~ class ~InvalidRequestError~
++ New ~Error~ class ~RequestNotCompleteError~
 + New function ~Requester.error()~ to retrieve errors from failed requests.
 
 ** Internal changes
-+ Extracted ~Requester.error()~ and Requester.response() error
++ Extracted ~Requester.error()~ and ~Requester.response()~ error
   checking code into single helper function
   ~Requester._responseErrorChecker()~.
 
