@@ -25,4 +25,21 @@ export class IDInUseError extends Error {
   }
 }
 
-//  LocalWords:  IDInUseError
+/**
+ * Error thrown when an attempt is made to access the response or
+ * error from a request that is still in-flight
+ * @since 0.0.1
+ */
+export class RequestNotCompleteError extends Error {
+  /**
+   * Create an RequestNotCompleteError
+   * @param {string} message - Error message
+   */
+  constructor(message) {
+    super(message);
+    this.name = "RequestNotCompleteError";
+  }
+}
+
+
+//  LocalWords:  IDInUseError RequestNotCompleteError

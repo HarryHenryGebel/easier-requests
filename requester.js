@@ -73,7 +73,7 @@ class Requester {
    * was created
    * @return {Object} The response returned. Will be set to undefined
    * if the request failed.
-   * @throws {RequestNotComplete} Thrown when a response is requested
+   * @throws {RequestNotCompleteError} Thrown when a response is requested
    * from an in-flight request.
    * @throws {InvalidRequest} Thrown when an ID does not exist. Caused
    * by a request never being made or already having been
@@ -81,6 +81,10 @@ class Requester {
    * to prevent a memory leak on long running apps.
    */
   response(id) {
+    if (id in this.inFlightRequests)
+      throw new RequestNotCompleteError(
+        `Request with ID ${id} has not completed.`);
+
     if (this.cachedResponses[id] === undefined)
       // do not delete until the error is retrieved
       return undefined;
@@ -110,4 +114,4 @@ export const requester = new Requester();
 // TODO create errors that the documentation falsely claims will be
 // thrown on invalid requests IDs (and throw the errors).
 
-//  LocalWords:  RequestNotComplete InvalidRequest IDInUseError
+//  LocalWords:  RequestNotCompleteError InvalidRequest IDInUseError
