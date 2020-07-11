@@ -10,6 +10,7 @@
 'use strict';
 
 import axios from 'axios';
+import IDInUseError from 'error';
 
 /**
  * Class representing actions to perform HTTP requests and cache their
@@ -17,6 +18,8 @@ import axios from 'axios';
  * @since 0.0.0
  */
 class Requester {
+  // TODO implement general request function
+
   /**
    * Create a Requester
    * @since 0.0.0
@@ -38,9 +41,13 @@ class Requester {
    * @since 0.0.1
    * @param {string} url - URL of resource to be requested
    * @param {string} id - Unique ID used to refer to request and response
-   * @throws {IDInUse} Thrown when a requested ID is already in use.
+   * @throws {IDInUseError} Thrown when a requested ID is already in use.
    */
   async get(url, id) {
+    // id cannot be in use
+    if (id in this.cachedResponses || id in this.inFlightRequests)
+      throw new IDInUseError(`ID ${id} is already in use`);
+
     // cache id with promise
     this.inFlightRequests[id] = axios.get(url)
     // on success, set error to undefined, on failure set response to
@@ -92,25 +99,10 @@ class Requester {
    * @deprecated since 0.0.1 - will not be included in 1.0.0
    * @param {string} url - URL of resource to be requested
    * @param {string} id - Unique ID used to refer to request and response
-   * @throws {IDInUse} Thrown when a requested ID is already in use.
+   * @throws {IDInUseError} Thrown when a requested ID is already in use.
    */
   async httpGet(url, id) {
-    // cache id with promise
-    this.inFlightRequests[id] = axios.get(url)
-    // on success, set error to undefined, on failure set response to
-    // undefined
-      .then(function (response) {
-        this.cachedResponses[id] = response;
-        this.cachedErrors[id] = undefined;
-      })
-      .catch(function (error) {
-        this.cachedResponses[id] = undefined;
-        this.cachedErrors[id] = error;
-      });
-    await this.inFlightRequests[id];
-
-    // get rid of cached ID since we are no longer in flight
-    delete this.inFlightRequests[id];
+    await this.get(url, id);
   }
 }
 export const requester = new Requester();
@@ -118,4 +110,4 @@ export const requester = new Requester();
 // TODO create errors that the documentation falsely claims will be
 // thrown on invalid requests IDs (and throw the errors).
 
-//  LocalWords:  RequestNotComplete InvalidRequest IDInUse
+//  LocalWords:  RequestNotComplete InvalidRequest IDInUseError
