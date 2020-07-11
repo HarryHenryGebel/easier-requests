@@ -2,7 +2,7 @@
 0.0.1 should be ready for use in projects requiring only HTTP GET requests.
 
 ** Deprecated features
-+ ~Requester.(httpGet)~ is deprecated and will be removed in =1.0.0=.
++ ~Requester.httpGet()~ is deprecated and will be removed in =1.0.0=.
   Replaced with ~Requester.get()~.
 
 ** New features
