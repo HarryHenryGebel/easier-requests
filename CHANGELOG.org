@@ -1,0 +1,7 @@
+* Version 0.0.1
+** Deprecations
+~Requester.(httpGet)~ is deprecated and will be removed in
+=1.0.0=. Replaced with ~response.get()~.
+
+* Version 0.0.0
+*** Initial release
