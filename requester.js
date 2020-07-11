@@ -25,9 +25,13 @@ class Requester {
     // holds responses awaiting retrieval
     this.cachedResponses = {};
     this.errors = {};
+
+    // in flight request IDs
+    this.inFlightRequests = {};
   }
 
-  // retrieve a response from cache
+  // TODO write function to generate guaranteed unique IDs
+
   /**
    * Retrieve a response based on it's ID
    * @since 0.0.0
@@ -48,7 +52,8 @@ class Requester {
     return response;
   }
 
-  // perform an HTTP GET and cache the response
+  // TODO write function to retrieve error messages
+
   /**
    * perform an HTTP request and cache response
    * @async
@@ -58,12 +63,23 @@ class Requester {
    * @throws {IDExists} Thrown when a requested ID is already in use.
    */
   async httpGet(url, id) {
-    await axios.get(url)
+    // cache id with promise
+    this.inFlightRequests[id] = axios.get(url)
       .then(response => this.cachedResponses[id] = response)
       .catch(function (error) {
         this.cachedResponses[id] = undefined;
         this.errors[id] = error;
       });
+
+    await this.inFlightRequests[id];
+
+    // get rid of cached ID since we are no longer in flight
+    delete this.inFlightRequests[id];
   }
 }
 const cache = new ResponseHolder();
+
+// TODO create errors that the documentation falsely claims will be
+// thrown on invalid requests IDs (and throw the errors).
+
+//  LocalWords:  RequestNotComplete InvalidRequest
