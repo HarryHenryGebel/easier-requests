@@ -59,14 +59,14 @@ class Requester {
   // TODO write function to retrieve error messages
 
   /**
-   * perform an HTTP request and cache response
+   * perform an HTTP get request and cache response
    * @async
    * @since 0.0.0
    * @param {string} url - URL of resource to be requested
    * @param {string} id - Unique ID used to refer to request and response
    * @throws {IDInUse} Thrown when a requested ID is already in use.
    */
-  async httpGet(url, id) {
+  async get(url, id) {
     // cache id with promise
     this.inFlightRequests[id] = axios.get(url)
     // on success, set error to undefined, on failure set response to
