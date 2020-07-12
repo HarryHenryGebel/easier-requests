@@ -1,5 +1,5 @@
 * easier-requests
-=easier-requests= is a page to allow HTTP requests to be made in a more
+=easier-requests= is a package to allow HTTP requests to be made in a more
 synchronous manner inside an async function.
 
 ** Install
