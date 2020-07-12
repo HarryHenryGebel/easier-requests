@@ -21,7 +21,9 @@
   },
   "homepage": "https://harryhenrygebel.github.io/easier-requests/",
   "devDependencies": {
-    "jest": "^26.1.0"
+    "jest": "^26.1.0",
+    "jsdoc": "^3.6.4",
+    "docdash": "^1.2.0"
   },
   "dependencies": {
     "axios": "^0.19.2"
