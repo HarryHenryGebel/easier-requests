@@ -168,7 +168,7 @@ class Requester {
   }
 
   /**
-   * perform an HTTP get request and cache response
+   * Perform an HTTP get request and cache response
    * @async
    * @since 0.0.0
    * @deprecated since 0.0.1 - will not be included in 1.0.0
