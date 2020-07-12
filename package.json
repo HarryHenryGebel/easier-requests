@@ -1,10 +1,11 @@
 {
   "name": "easier-requests",
-  "version": "0.0.0",
+  "version": "0.0.1rc1",
   "description": "Package to make it easier to write simple networking code. Targeted towards students and hobbyists, but hopefully useful to anyone.",
   "main": "requester.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "documentation": "jsdoc *.js -t node_modules/docdash/ -d documentation"
   },
   "repository": {
     "type": "git",
@@ -12,7 +13,8 @@
   },
   "keywords": [
     "axios",
-    "http"
+    "http",
+    "async"
   ],
   "author": "Harry Henry Gebel <hhgebel@gmail.com>",
   "license": "MIT",
@@ -21,7 +23,9 @@
   },
   "homepage": "https://harryhenrygebel.github.io/easier-requests/",
   "devDependencies": {
-    "jest": "^26.1.0"
+    "jest": "^26.1.0",
+    "jsdoc": "^3.6.4",
+    "docdash": "^1.2.0"
   },
   "dependencies": {
     "axios": "^0.19.2"

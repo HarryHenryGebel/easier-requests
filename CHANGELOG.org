@@ -1,0 +1,30 @@
+* Version 0.0.1
+0.0.1 should be ready for use in projects requiring only HTTP GET requests.
+
+** Deprecated features
++ ~Requester.httpGet()~ is deprecated and will be removed in =1.0.0=.
+  Replaced with ~Requester.get()~.
+
+** New features
++ New module =errors.js= to hold error classes.
++ New ~Error~ class ~IDInUseError~
++ New ~Error~ class ~InvalidRequestError~
++ New ~Error~ class ~RequestNotCompleteError~
++ New function ~Requester.error()~ to retrieve errors from failed requests.
++ New function ~Requester.createUniqueID()~ to create guaranteed
+  unique IDs to assign to requests.
+
+** Internal changes
++ Extracted ~Requester.error()~ and ~Requester.response()~ error
+  checking code into single helper function
+  ~Requester._responseErrorChecker()~.
+
+
+** Future plans
++ Implement a general request function that can handle any HTTP
+  request type, then implement functions for each request type that
+  use the general request function.
+
+
+* Version 0.0.0
+Initial release
