@@ -19,10 +19,12 @@
   checking code into single helper function
   ~Requester._responseErrorChecker()~.
 
-* Version 0.0.0
-Initial release
 
-** TODO
+** Future plans
 + Implement a general request function that can handle any HTTP
   request type, then implement functions for each request type that
   use the general request function.
+
+
+* Version 0.0.0
+Initial release
