@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "test": "jest",
-    "documentation": "jsdoc *.js -t node_modules/docdash/ -d docs"
+    "documentation": "jsdoc README.md *.js -t node_modules/docdash/ -d docs"
   },
   "repository": {
     "type": "git",

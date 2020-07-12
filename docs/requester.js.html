@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>requester.js - Documentation</title>
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav >
+    
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="module-easier-requests-Requester.html">Requester</a><ul class='methods'><li data-type='method'><a href="module-easier-requests-Requester.html#createUniqueID">createUniqueID</a></li><li data-type='method'><a href="module-easier-requests-Requester.html#error">error</a></li><li data-type='method'><a href="module-easier-requests-Requester.html#get">get</a></li><li data-type='method'><a href="module-easier-requests-Requester.html#httpGet">httpGet</a></li><li data-type='method'><a href="module-easier-requests-Requester.html#response">response</a></li></ul></li><li><a href="module-error.IDInUseError.html">IDInUseError</a></li><li><a href="module-error.InvalidRequestError.html">InvalidRequestError</a></li><li><a href="module-error.RequestNotCompleteError.html">RequestNotCompleteError</a></li></ul><h3>Modules</h3><ul><li><a href="module-easier-requests.html">easier-requests</a></li><li><a href="module-error.html">error</a></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">requester.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @file Provide the requester class.
+ * @author Harry Henry Gebel &lt;hhgebel@gmail.com>
+ * @copyright 2020 Harry Henry Gebel
+ * @license MIT
+ * @version 0.0.1
+ * @module easier-requests
+ * @since 0.0.0
+ */
+'use strict';
+
+import axios from 'axios';
+import {IDInUseError,
+        RequestNotCompleteError,
+        InvalidRequestError} from './errors';
+
+// TODO allow user to set option to throw error on failed requests
+/**
+ * Class representing actions to perform HTTP requests and cache their
+ * responses for later retrieval.
+ * @since 0.0.0
+ */
+class Requester {
+  // TODO implement general request function
+
+  /**
+   * Create a Requester
+   * @since 0.0.0
+   */
+  constructor() {
+    // holds responses awaiting retrieval
+    this.cachedResponses = {};
+    this.cachedErrors = {};
+
+    // in flight request IDs
+    this.inFlightRequests = {};
+
+    // Updated every time a unique ID is generated, in order to help
+    // ensure generated ids are in fact unique.
+    this.idSerialNumber = 0;
+  }
+
+  /**
+   * Generates a unique ID to prevent ID name clashes. This function
+   * will never generate the same ID twice during the existence of a
+   * specific instance of the Requester class.
+   * @since 0.0.1
+   * @param {string} [prefix = ''] - String which will be applied as the
+   * first part of every generated unique ID.
+   * @return {string} The generated ID. Returned IDs have the
+   * format "${prefix}#${serial number}#${timestamp}", where prefix is
+   * a string prefix optionally provided by the user.
+   */
+  createUniqueID(prefix = '') {
+    this.idSerialNumber++;
+
+    return `${prefix}#${this.idSerialNumber}#${Date.now()}`;
+  }
+
+  /**
+   * Perform an HTTP get request and cache response
+   * @async
+   * @since 0.0.1
+   * @param {string} url - URL of resource to be requested
+   * @param {string} id - Unique ID used to refer to request and response
+   * @throws {IDInUseError} Thrown when a requested ID is already in use.
+   */
+  async get(url, id) {
+    // id cannot be in use
+    if (id in this.cachedResponses || id in this.inFlightRequests)
+      throw new IDInUseError(`ID ${id} is already in use`);
+
+    const caller = this; // store this for use in callbacks
+    // cache id with promise
+    this.inFlightRequests[id] = axios.get(url)
+    // on success, set error to undefined, on failure set response to
+    // undefined
+      .then(function (response) {
+        caller.cachedResponses[id] = response;
+        caller.cachedErrors[id] = undefined;
+      })
+      .catch(function (error) {
+        caller.cachedResponses[id] = undefined;
+        caller.cachedErrors[id] = error;
+      });
+    await this.inFlightRequests[id];
+
+    // get rid of cached ID since we are no longer in flight
+    delete this.inFlightRequests[id];
+  }
+
+  /**
+   * Check if an ID is invalid or in-flight and throw any appropriate
+   * errors.
+   * @private
+   * @since 0.0.1
+   * @param {string} id - Id to check for errors
+   * @throws {RequestNotCompleteError} Thrown when a response is requested
+   * from an in-flight request.
+   * @throws {InvalidRequestError} Thrown when an ID does not exist. Caused
+   * by a request never having been made or already having been
+   * retrieved. Retrieved requests are deleted from the cache
+   * to prevent a memory leak on long running apps.
+   */
+  _responseErrorChecker(id) {
+    if (id in this.inFlightRequests)
+      throw new RequestNotCompleteError(
+        `Request with ID ${id} has not completed.`);
+    if (!(id in this.cachedResponses) &amp;&amp; !(id in this.inFlightRequests))
+      throw new InvalidRequestError(
+        `Request with ID ${id}` +
+          ' has already been retrieved or was never created.');
+  }
+
+  /**
+   * Retrieve an error based on it's ID
+   * @since 0.0.1
+   * @param {string} id - The ID passed into the HTTP request when it
+   * was created
+   * @return {Object} The error returned. Will be set to undefined
+   * if the request succeeded.
+   * @throws {RequestNotCompleteError} Thrown when a response is requested
+   * from an in-flight request.
+   * @throws {InvalidRequestError} Thrown when an ID does not exist. Caused
+   * by a request never having been made or already having been
+   * retrieved. Retrieved requests are deleted from the cache
+   * to prevent a memory leak on long running apps.
+   */
+  error(id) {
+    // check for errors
+    this._responseErrorChecker(id);
+
+    if (this.cachedErrors[id] === undefined)
+      // do not delete until the response is retrieved
+      return undefined;
+
+    const errorReturned = this.cachedErrors[id];
+    delete this.cachedErrors[id];
+    delete this.cachedResponses[id];
+    return errorReturned;
+  }
+
+  /**
+   * Retrieve a response based on it's ID
+   * @since 0.0.0
+   * @param {string} id - The ID passed into the HTTP request when it
+   * was created
+   * @return {Object} The response returned. Will be set to undefined
+   * if the request failed.
+   * @throws {RequestNotCompleteError} Thrown when a response is requested
+   * from an in-flight request.
+   * @throws {InvalidRequestError} Thrown when an ID does not exist. Caused
+   * by a request never having been made or already having been
+   * retrieved. Retrieved requests are deleted from the cache
+   * to prevent a memory leak on long running apps.
+   */
+  response(id) {
+    // check for errors
+    this._responseErrorChecker(id);
+
+
+    if (this.cachedResponses[id] === undefined)
+      // do not delete until the error is retrieved
+      return undefined;
+
+    const response = this.cachedResponses[id];
+    delete this.cachedErrors[id];
+    delete this.cachedResponses[id];
+    return response;
+  }
+
+  /**
+   * Perform an HTTP get request and cache response
+   * @async
+   * @since 0.0.0
+   * @deprecated since 0.0.1 - will not be included in 1.0.0
+   * @param {string} url - URL of resource to be requested
+   * @param {string} id - Unique ID used to refer to request and response
+   * @throws {IDInUseError} Thrown when a requested ID is already in use.
+   */
+  async httpGet(url, id) {
+    await this.get(url, id);
+  }
+}
+
+/**
+ * Preconstructed Requester() instance. Requester is designed to be used primarily from this exported instance.
+ */
+export const requester = new Requester();
+
+//  LocalWords:  RequestNotCompleteError InvalidRequestError IDInUseError
+//  LocalWords:  idSerialNumber
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a> on Sun Jul 12 2020 10:44:57 GMT-0400 (Eastern Daylight Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+
+
+</body>
+</html>
