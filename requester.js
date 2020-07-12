@@ -69,17 +69,18 @@ class Requester {
     if (id in this.cachedResponses || id in this.inFlightRequests)
       throw new IDInUseError(`ID ${id} is already in use`);
 
+    const caller = this; // store this for use in callbacks
     // cache id with promise
     this.inFlightRequests[id] = axios.get(url)
     // on success, set error to undefined, on failure set response to
     // undefined
       .then(function (response) {
-        this.cachedResponses[id] = response;
-        this.cachedErrors[id] = undefined;
+        caller.cachedResponses[id] = response;
+        caller.cachedErrors[id] = undefined;
       })
       .catch(function (error) {
-        this.cachedResponses[id] = undefined;
-        this.cachedErrors[id] = error;
+        caller.cachedResponses[id] = undefined;
+        caller.cachedErrors[id] = error;
       });
     await this.inFlightRequests[id];
 
