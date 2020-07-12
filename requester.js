@@ -12,7 +12,7 @@
 import axios from 'axios';
 import {IDInUseError,
         RequestNotCompleteError,
-        InvalidRequestError} from './error';
+        InvalidRequestError} from './errors';
 
 /**
  * Class representing actions to perform HTTP requests and cache their
