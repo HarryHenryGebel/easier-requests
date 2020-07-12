@@ -41,7 +41,7 @@ await requester.get('https://lambda-times-backend.herokuapp.com/articles',
 
 // retrieve response, checking for an error
 const response = requester.response(id);
-if (response `=` undefined) {
+if (response === undefined) {
   const errorMessage = 'ERROR RETRIEVING ARTICLES: ' +
         \`${requester.error(id)}\`;
   const errorDisplay = document.createElement('h1');
