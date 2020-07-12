@@ -180,6 +180,11 @@ class Requester {
     await this.get(url, id);
   }
 }
+
+/**
+ * Preconstructed Requester() instance. Requester is designed to be used primarily from this exported instance.
+ */
 export const requester = new Requester();
 
 //  LocalWords:  RequestNotCompleteError InvalidRequestError IDInUseError
+//  LocalWords:  idSerialNumber
