@@ -1,33 +1,33 @@
 
 # Table of Contents
 
-1.  [easier-requests](#org60fe1ca)
-    1.  [Install](#org5bf0777)
-    2.  [Usage](#orgdb5ca87)
+1.  [easier-requests](#org79c7c31)
+    1.  [Install](#orgaaea06b)
+    2.  [Usage](#orgef6d0c0)
 
 
-<a id="org60fe1ca"></a>
+<a id="org79c7c31"></a>
 
 # easier-requests
 
-`easier-requests` is a page to allow HTTP requests to be made in a more
+`easier-requests` is a package to allow HTTP requests to be made in a more
 synchronous manner inside an async function.
 
 
-<a id="org5bf0777"></a>
+<a id="orgaaea06b"></a>
 
 ## Install
 
-\#+BEGIN<sub>EXAMPLE</sub> shell
+```sh
 npm i easier-requests
-\#-END<sub>EXAMPLE</sub>
+```
 
 
-<a id="orgdb5ca87"></a>
+<a id="orgef6d0c0"></a>
 
 ## Usage
 
-\#-BEGIN<sub>EXAMPLE</sub> js
+```js
 import {requester} from "easier-requests";
 
 async function makeCards() {
@@ -57,5 +57,4 @@ if (response `=` undefined) {
       cardsContainer.appendChild(card);
     };
 }
-\#-END<sub>EXAMPLE</sub>
-
+```
