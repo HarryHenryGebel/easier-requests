@@ -36,7 +36,7 @@ class Requester {
 
     // Updated every time a unique ID is generated, in order to help
     // ensure generated ids are in fact unique.
-    this.idSerialNumber;
+    this.idSerialNumber = 0;
   }
 
   /**
@@ -53,7 +53,7 @@ class Requester {
   createUniqueID(prefix = '') {
     this.idSerialNumber++;
 
-    return `${prefix}$#{this.idSerialNumber}#${Date.now()}`;
+    return `${prefix}#${this.idSerialNumber}#${Date.now()}`;
   }
 
   /**
