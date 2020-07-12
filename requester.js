@@ -33,9 +33,28 @@ class Requester {
 
     // in flight request IDs
     this.inFlightRequests = {};
+
+    // Updated every time a unique ID is generated, in order to help
+    // ensure generated ids are in fact unique.
+    this.idSerialNumber;
   }
 
-  // TODO write function to generate guaranteed unique IDs
+  /**
+   * Generates a unique ID to prevent ID name clashes. This function
+   * will never generate the same ID twice during the existence of a
+   * specific instance of the Requester class.
+   * @since 0.0.1
+   * @param {string} prefix - String which will be applied as the
+   * first part of every generated unique ID.
+   * @return {string} The generated ID. Returned IDs have the
+   * format "${prefix}#${serial number}#${timestamp}", where prefix is
+   * a string prefix optionally provided by the user.
+   */
+  createUniqueID(prefix = '') {
+    this.idSerialNumber++;
+
+    return `${prefix}$#{this.idSerialNumber}#${Date.now()}`;
+  }
 
   /**
    * Perform an HTTP get request and cache response
