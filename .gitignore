@@ -3,6 +3,3 @@
 
 #node
 node_modules/
-
-#jsdoc
-documentation/

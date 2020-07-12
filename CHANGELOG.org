@@ -24,6 +24,8 @@
 + Implement a general request function that can handle any HTTP
   request type, then implement functions for each request type that
   use the general request function.
++ Give user the option of having errors thrown instead of cached
++ Give user the option of setting a timeout
 
 
 * Version 0.0.0
