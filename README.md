@@ -43,7 +43,7 @@ await requester.get('https://lambda-times-backend.herokuapp.com/articles',
 const response = requester.response(id);
 if (response === undefined) {
   const errorMessage = 'ERROR RETRIEVING ARTICLES: ' +
-        \`${requester.error(id)}\`;
+        `${requester.error(id)}`;
   const errorDisplay = document.createElement('h1');
   errorDisplay.textContent = errorMessage;
   cardsContainer.appendChild(errorDisplay);
