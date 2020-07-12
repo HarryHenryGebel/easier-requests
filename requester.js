@@ -38,7 +38,7 @@ class Requester {
   // TODO write function to generate guaranteed unique IDs
 
   /**
-   * perform an HTTP get request and cache response
+   * Perform an HTTP get request and cache response
    * @async
    * @since 0.0.1
    * @param {string} url - URL of resource to be requested
@@ -77,7 +77,7 @@ class Requester {
    * @throws {RequestNotCompleteError} Thrown when a response is requested
    * from an in-flight request.
    * @throws {InvalidRequestError} Thrown when an ID does not exist. Caused
-   * by a request never being made or already having been
+   * by a request never having been made or already having been
    * retrieved. Retrieved requests are deleted from the cache
    * to prevent a memory leak on long running apps.
    */
@@ -101,7 +101,7 @@ class Requester {
    * @throws {RequestNotCompleteError} Thrown when a response is requested
    * from an in-flight request.
    * @throws {InvalidRequestError} Thrown when an ID does not exist. Caused
-   * by a request never being made or already having been
+   * by a request never having been made or already having been
    * retrieved. Retrieved requests are deleted from the cache
    * to prevent a memory leak on long running apps.
    */
@@ -129,7 +129,7 @@ class Requester {
    * @throws {RequestNotCompleteError} Thrown when a response is requested
    * from an in-flight request.
    * @throws {InvalidRequestError} Thrown when an ID does not exist. Caused
-   * by a request never being made or already having been
+   * by a request never having been made or already having been
    * retrieved. Retrieved requests are deleted from the cache
    * to prevent a memory leak on long running apps.
    */

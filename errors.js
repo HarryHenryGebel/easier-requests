@@ -49,7 +49,7 @@ export class InvalidRequestError extends Error {
  */
 export class RequestNotCompleteError extends Error {
   /**
-   * Create an RequestNotCompleteError
+   * Create a RequestNotCompleteError
    * @param {string} message - Error message
    */
   constructor(message) {
