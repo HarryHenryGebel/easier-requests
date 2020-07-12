@@ -12,7 +12,8 @@
   },
   "keywords": [
     "axios",
-    "http"
+    "http",
+    "async"
   ],
   "author": "Harry Henry Gebel <hhgebel@gmail.com>",
   "license": "MIT",
