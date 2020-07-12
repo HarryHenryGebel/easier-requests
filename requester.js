@@ -44,7 +44,7 @@ class Requester {
    * will never generate the same ID twice during the existence of a
    * specific instance of the Requester class.
    * @since 0.0.1
-   * @param {string} prefix - String which will be applied as the
+   * @param {string} [prefix = ''] - String which will be applied as the
    * first part of every generated unique ID.
    * @return {string} The generated ID. Returned IDs have the
    * format "${prefix}#${serial number}#${timestamp}", where prefix is
