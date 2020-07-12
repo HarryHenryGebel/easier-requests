@@ -28,13 +28,14 @@ npm i easier-requests
 ## Usage
 
 ```js
+// Import requester instance from easier-requests module
 import {requester} from "easier-requests";
 
 async function makeCards() {
   const cardsContainer = document.querySelector('.cards-container');
 
-const id = requester.createUniqueID(); */ get a unique id
-/* perform request
+const id = requester.createUniqueID(); // get a unique id
+// perform request
 await requester.get('https://lambda-times-backend.herokuapp.com/articles',
                     id);
 
