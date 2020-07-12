@@ -79,6 +79,7 @@ synchronous manner inside an async function.</p>
 <pre class="prettyprint source lang-js"><code>// Import requester instance from easier-requests module
 import {requester} from &quot;easier-requests&quot;;
 
+// Requester.get() is designed to be used in an async function
 async function makeCards() {
   const cardsContainer = document.querySelector('.cards-container');
 

@@ -31,6 +31,7 @@ npm i easier-requests
 // Import requester instance from easier-requests module
 import {requester} from "easier-requests";
 
+// Requester.get() is designed to be used in an async function
 async function makeCards() {
   const cardsContainer = document.querySelector('.cards-container');
 
