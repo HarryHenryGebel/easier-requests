@@ -14,6 +14,7 @@ import {IDInUseError,
         RequestNotCompleteError,
         InvalidRequestError} from './errors';
 
+// TODO allow user to set option to throw error on failed requests
 /**
  * Class representing actions to perform HTTP requests and cache their
  * responses for later retrieval.
