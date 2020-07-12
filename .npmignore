@@ -1,0 +1,8 @@
+#Emacs
+*~
+
+#node
+node_modules/
+
+#documentation
+docs/

@@ -35,28 +35,27 @@ import {requester} from "easier-requests";
 async function makeCards() {
   const cardsContainer = document.querySelector('.cards-container');
 
-const id = requester.createUniqueID(); // get a unique id
-// perform request
-await requester.get('https://lambda-times-backend.herokuapp.com/articles',
-                    id);
+  const id = requester.createUniqueID(); // get a unique id
+  // perform request
+  await requester.get('https://example.herokuapp.com/articles', id);
 
-// retrieve response, checking for an error
-const response = requester.response(id);
-if (response === undefined) {
-  const errorMessage = 'ERROR RETRIEVING ARTICLES: ' +
-        `${requester.error(id)}`;
-  const errorDisplay = document.createElement('h1');
-  errorDisplay.textContent = errorMessage;
-  cardsContainer.appendChild(errorDisplay);
-  return;
-}
+  // retrieve response, checking for an error
+  const response = requester.response(id);
+  if (response === undefined) {
+    const errorMessage = 'ERROR RETRIEVING ARTICLES: ' +
+          `${requester.error(id)}`;
+    const errorDisplay = document.createElement('h1');
+    errorDisplay.textContent = errorMessage;
+    cardsContainer.appendChild(errorDisplay);
+    return;
+  }
 
-  // process data
-  const topics = response.data.articles;
-  for (let topic in topics)
-    for (let article of topics[topic]) {
-      const card = makeCard(article);
-      cardsContainer.appendChild(card);
-    };
-}
+    // process data
+    const topics = response.data.articles;
+    for (let topic in topics)
+      for (let article of topics[topic]) {
+        const card = makeCard(article);
+        cardsContainer.appendChild(card);
+      };
+  }
 ```
