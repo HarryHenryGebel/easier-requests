@@ -148,8 +148,6 @@ class Requester {
     return response;
   }
 
-  // TODO write function to retrieve error messages
-
   /**
    * perform an HTTP get request and cache response
    * @async
@@ -164,8 +162,5 @@ class Requester {
   }
 }
 export const requester = new Requester();
-
-// TODO create errors that the documentation falsely claims will be
-// thrown on invalid requests IDs (and throw the errors).
 
 //  LocalWords:  RequestNotCompleteError InvalidRequestError IDInUseError
