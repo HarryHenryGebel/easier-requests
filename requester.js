@@ -168,19 +168,6 @@ class Requester {
     delete this.cachedResponses[id];
     return response;
   }
-
-  /**
-   * Perform an HTTP get request and cache response
-   * @async
-   * @since 0.0.0
-   * @deprecated since 0.0.1 - will not be included in 1.0.0
-   * @param {string} url - URL of resource to be requested
-   * @param {string} id - Unique ID used to refer to request and response
-   * @throws {IDInUseError} Thrown when a requested ID is already in use.
-   */
-  async httpGet(url, id) {
-    await this.get(url, id);
-  }
 }
 
 /**

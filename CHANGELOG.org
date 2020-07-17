@@ -1,6 +1,8 @@
 * Version 0.0.3
 ** Breaking changes
 + made ~Requester~ instance ~requester~ the default export
++ remove ~Requester.httpGet~
+
 * Version 0.0.2
 Small update to remove documentation from the npm package and fix the
 example README.md
