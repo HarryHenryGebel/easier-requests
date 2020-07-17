@@ -3,7 +3,7 @@
  * @author Harry Henry Gebel <hhgebel@gmail.com>
  * @copyright 2020 Harry Henry Gebel
  * @license MIT
- * @version 0.0.1
+ * @version 0.0.3
  * @module easier-requests
  * @since 0.0.0
  */
@@ -186,7 +186,8 @@ class Requester {
 /**
  * Preconstructed Requester() instance. Requester is designed to be used primarily from this exported instance.
  */
-export const requester = new Requester();
+const requester = new Requester();
+export default requester;
 
 //  LocalWords:  RequestNotCompleteError InvalidRequestError IDInUseError
 //  LocalWords:  idSerialNumber
