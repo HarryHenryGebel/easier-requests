@@ -3,7 +3,7 @@
  * @author Harry Henry Gebel <hhgebel@gmail.com>
  * @copyright 2020 Harry Henry Gebel
  * @license MIT
- * @version 0.0.1
+ * @version 0.0.3
  * @module error
  * @since 0.0.1
  */
@@ -58,6 +58,21 @@ export class RequestNotCompleteError extends Error {
   }
 }
 
+/**
+ * Error thrown when there is not an even number of parameter
+ * arguments passed to a function.
+ * @since 0.0.3
+ */
+export class UnbalancedParametersError extends Error {
+  /**
+   * Create an InvalidRequestError
+   * @param {string} message - Error message
+   */
+  constructor(message) {
+    super(message);
+    this.name = "UnbalancedParametersError";
+  }
+}
 
 //  LocalWords:  IDInUseError RequestNotCompleteError
-//  LocalWords:  InvalidRequestError
+//  LocalWords:  InvalidRequestError UnbalancedParametersError

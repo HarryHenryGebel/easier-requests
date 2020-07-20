@@ -27,7 +27,7 @@
 
 <nav >
     
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="module-easier-requests-Requester.html">Requester</a><ul class='methods'><li data-type='method'><a href="module-easier-requests-Requester.html#createUniqueID">createUniqueID</a></li><li data-type='method'><a href="module-easier-requests-Requester.html#error">error</a></li><li data-type='method'><a href="module-easier-requests-Requester.html#get">get</a></li><li data-type='method'><a href="module-easier-requests-Requester.html#httpGet">httpGet</a></li><li data-type='method'><a href="module-easier-requests-Requester.html#response">response</a></li></ul></li><li><a href="module-error.IDInUseError.html">IDInUseError</a></li><li><a href="module-error.InvalidRequestError.html">InvalidRequestError</a></li><li><a href="module-error.RequestNotCompleteError.html">RequestNotCompleteError</a></li></ul><h3>Modules</h3><ul><li><a href="module-easier-requests.html">easier-requests</a></li><li><a href="module-error.html">error</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="module-easier-requests-Requester.html">Requester</a><ul class='methods'><li data-type='method'><a href="module-easier-requests-Requester.html#createUniqueID">createUniqueID</a></li><li data-type='method'><a href="module-easier-requests-Requester.html#delete">delete</a></li><li data-type='method'><a href="module-easier-requests-Requester.html#error">error</a></li><li data-type='method'><a href="module-easier-requests-Requester.html#get">get</a></li><li data-type='method'><a href="module-easier-requests-Requester.html#patch">patch</a></li><li data-type='method'><a href="module-easier-requests-Requester.html#post">post</a></li><li data-type='method'><a href="module-easier-requests-Requester.html#push">push</a></li><li data-type='method'><a href="module-easier-requests-Requester.html#response">response</a></li><li data-type='method'><a href="module-easier-requests-Requester.html#setOptions">setOptions</a></li></ul></li><li><a href="module-error.IDInUseError.html">IDInUseError</a></li><li><a href="module-error.InvalidRequestError.html">InvalidRequestError</a></li><li><a href="module-error.RequestNotCompleteError.html">RequestNotCompleteError</a></li><li><a href="module-error.UnbalancedParametersError.html">UnbalancedParametersError</a></li></ul><h3>Modules</h3><ul><li><a href="module-easier-requests.html">easier-requests</a></li><li><a href="module-error.html">error</a></li></ul>
 </nav>
 
 <div id="main">
@@ -47,7 +47,7 @@
  * @author Harry Henry Gebel &lt;hhgebel@gmail.com>
  * @copyright 2020 Harry Henry Gebel
  * @license MIT
- * @version 0.0.1
+ * @version 0.0.3
  * @module easier-requests
  * @since 0.0.0
  */
@@ -56,9 +56,9 @@
 import axios from 'axios';
 import {IDInUseError,
         RequestNotCompleteError,
-        InvalidRequestError} from './errors';
+        InvalidRequestError,
+        UnbalancedParametersError} from './errors';
 
-// TODO allow user to set option to throw error on failed requests
 /**
  * Class representing actions to perform HTTP requests and cache their
  * responses for later retrieval.
@@ -82,6 +82,14 @@ class Requester {
     // Updated every time a unique ID is generated, in order to help
     // ensure generated ids are in fact unique.
     this.idSerialNumber = 0;
+
+    this._defaultOptions = {
+       // should we throw an error when a response fails?
+      throwOnFailure: false
+    };
+
+    // copy in order to preserve original
+    this._options = {...this._defaultOptions};
   }
 
   /**
@@ -102,21 +110,140 @@ class Requester {
   }
 
   /**
-   * Perform an HTTP get request and cache response
+   * Wrap variable parameters into a params object
+   * @private
+   * @since 0.0.3
+   * @param {string[]} params - Parameters of request. Each request
+   * parameter should use two function parameters, the first the name
+   * of the parameter and the second it's value. The number of
+   * arguments in params should always be even.
+   * @return {Object} Parameters wrapped into a params object suitable for passing to Requester._request.
+   */
+  _wrapParams(params) {
+    // handle request parameters
+    if (params.length % 2 != 0)
+      throw new UnbalancedParametersError(
+        "Each request parameter must have a parameter name and a value.");
+
+    const parameters = {}; // gather params into object
+    for (let i = 0; i &lt; params.length; i += 2)
+      parameters[params[i]] = params[i + 1];
+
+    return parameters;
+  }
+
+  /**
+   * Perform an HTTP DELETE request and cache response
+   * @async
+   * @since 0.0.3
+   * @param {string} url - URL of request
+   * @param {string} id - Unique ID of request, used to retrieve results
+   * @param {...string} params - Parameters of request. Each request
+   * parameter should use two function parameters, the first the name
+   * of the parameter and the second it's value. The number of
+   * arguments in params should always be even.
+   */
+  async delete(url, id, ...params) {
+    await this._request('delete',
+                        url,
+                        id,
+                        undefined,
+                        this._wrapParams(params));
+  }
+
+  /**
+   * Perform an HTTP GET request and cache response
    * @async
    * @since 0.0.1
-   * @param {string} url - URL of resource to be requested
-   * @param {string} id - Unique ID used to refer to request and response
-   * @throws {IDInUseError} Thrown when a requested ID is already in use.
+   * @param {string} url - URL of request
+   * @param {string} id - Unique ID of request, used to retrieve results
+   * @param {...string} params - Parameters of request. Each request
+   * parameter should use two function parameters, the first the name
+   * of the parameter and the second it's value. The number of
+   * arguments in params should always be even.
    */
-  async get(url, id) {
+  async get(url, id, ...params) {
+    await this._request('get', url, id, undefined, this._wrapParams(params));
+  }
+
+  /**
+   * Perform an HTTP PATCH request and cache response
+   * @async
+   * @since 0.0.3
+   * @param {string} url - URL of request
+   * @param {string} id - Unique ID of request, used to retrieve results
+   * @param {Object} data - Data for request.
+   * @param {...string} params - Parameters of request. Each request
+   * parameter should use two function parameters, the first the name
+   * of the parameter and the second it's value. The number of
+   * arguments in params should always be even.
+   */
+  async patch(url, id, data, ...params) {
+    await this._request('patch', url, id, data, this._wrapParams(params));
+  }
+
+  /**
+   * Perform an HTTP POST request and cache response
+   * @async
+   * @since 0.0.3
+   * @param {string} url - URL of request
+   * @param {string} id - Unique ID of request, used to retrieve results
+   * @param {Object} data - Data for request.
+   * @param {...string} params - Parameters of request. Each request
+   * parameter should use two function parameters, the first the name
+   * of the parameter and the second it's value. The number of
+   * arguments in params should always be even.
+   */
+  async post(url, id, data, ...params) {
+    await this._request('post', url, id, data, this._wrapParams(params));
+  }
+
+  /**
+   * Perform an HTTP PUSH request and cache response
+   * @async
+   * @since 0.0.3
+   * @param {string} url - URL of request
+   * @param {string} id - Unique ID of request, used to retrieve results
+   * @param {Object} data - Data for request.
+   * @param {...string} params - Parameters of request. Each request
+   * parameter should use two function parameters, the first the name
+   * of the parameter and the second it's value. The number of
+   * arguments in params should always be even.
+   */
+  async push(url, id, data, ...params) {
+    await this._request('push', url, id, data, this._wrapParams(params));
+  }
+
+  /**
+   * Perform an axios request
+   * @async
+   * @private
+   * @since 0.0.3
+   * @param {string} method - HTTP method of request to performed
+   * (GET, POST, etc.)
+   * @param {string} url - URL of request
+   * @param {string} id - Unique ID of request, used to retrieve results
+   * @param {Object} data - Data for POST, PUT, and PATCH
+   * requests. Ignored for GET requests.
+   * @param {Object} params - Parameters of request. Each request
+   * parameter should use two function parameters, the first the name
+   * of the parameter and the second it's value. The number of
+   * arguments in params should always be even.
+   */
+  async _request(method, url, id, data, params) {
+
+    const config = {method: method,
+                    params: params,
+                    url: url,
+                    data: data};
+
     // id cannot be in use
     if (id in this.cachedResponses || id in this.inFlightRequests)
       throw new IDInUseError(`ID ${id} is already in use`);
 
     const caller = this; // store this for use in callbacks
     // cache id with promise
-    this.inFlightRequests[id] = axios.get(url)
+    this.inFlightRequests[id] = axios.request(config)
     // on success, set error to undefined, on failure set response to
     // undefined
       .then(function (response) {
@@ -126,6 +253,12 @@ class Requester {
       .catch(function (error) {
         caller.cachedResponses[id] = undefined;
         caller.cachedErrors[id] = error;
+        // throw error if set in options
+        if (caller._options.throwOnFailure) {
+          // control flow will never reach end of function if thrown
+          delete caller.inFlightRequests[id];
+          throw error;
+        }
       });
     await this.inFlightRequests[id];
 
@@ -213,27 +346,33 @@ class Requester {
     return response;
   }
 
-  /**
-   * Perform an HTTP get request and cache response
-   * @async
-   * @since 0.0.0
-   * @deprecated since 0.0.1 - will not be included in 1.0.0
-   * @param {string} url - URL of resource to be requested
-   * @param {string} id - Unique ID used to refer to request and response
-   * @throws {IDInUseError} Thrown when a requested ID is already in use.
-   */
-  async httpGet(url, id) {
-    await this.get(url, id);
+  /** Set new options, or restore to defaults.
+  * @since 0.0.3
+  * @param {Object} options - Options passed in to function. Options
+  * not set in options will be left at current value. If options is an
+  * empty object, reset all options to defaults. If options is null,
+  * return a copy of the current options.
+  * @return {Object} Copy of options after any changes.
+  */
+  setOptions(options) {
+    // test for empty object
+    if (Object.keys(options).length === 0)
+      this._options = this._defaultOptions;
+    else if (options !== null)
+      this._options = Object.assign(this._options, options);
+
+    return {...this._options};
   }
 }
 
 /**
  * Preconstructed Requester() instance. Requester is designed to be used primarily from this exported instance.
  */
-export const requester = new Requester();
+const requester = new Requester();
+export default requester;
 
 //  LocalWords:  RequestNotCompleteError InvalidRequestError IDInUseError
-//  LocalWords:  idSerialNumber
+//  LocalWords:  idSerialNumber params
 </code></pre>
         </article>
     </section>
@@ -248,7 +387,7 @@ export const requester = new Requester();
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a> on Sun Jul 12 2020 10:44:57 GMT-0400 (Eastern Daylight Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a> on Mon Jul 20 2020 02:26:49 GMT-0400 (Eastern Daylight Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>

@@ -12,9 +12,9 @@
 import axios from 'axios';
 import {IDInUseError,
         RequestNotCompleteError,
-        InvalidRequestError} from './errors';
+        InvalidRequestError,
+        UnbalancedParametersError} from './errors';
 
-// TODO allow user to set option to throw error on failed requests
 /**
  * Class representing actions to perform HTTP requests and cache their
  * responses for later retrieval.
@@ -38,6 +38,14 @@ class Requester {
     // Updated every time a unique ID is generated, in order to help
     // ensure generated ids are in fact unique.
     this.idSerialNumber = 0;
+
+    this._defaultOptions = {
+       // should we throw an error when a response fails?
+      throwOnFailure: false
+    };
+
+    // copy in order to preserve original
+    this._options = {...this._defaultOptions};
   }
 
   /**
@@ -58,21 +66,140 @@ class Requester {
   }
 
   /**
-   * Perform an HTTP get request and cache response
+   * Wrap variable parameters into a params object
+   * @private
+   * @since 0.0.3
+   * @param {string[]} params - Parameters of request. Each request
+   * parameter should use two function parameters, the first the name
+   * of the parameter and the second it's value. The number of
+   * arguments in params should always be even.
+   * @return {Object} Parameters wrapped into a params object suitable for passing to Requester._request.
+   */
+  _wrapParams(params) {
+    // handle request parameters
+    if (params.length % 2 != 0)
+      throw new UnbalancedParametersError(
+        "Each request parameter must have a parameter name and a value.");
+
+    const parameters = {}; // gather params into object
+    for (let i = 0; i < params.length; i += 2)
+      parameters[params[i]] = params[i + 1];
+
+    return parameters;
+  }
+
+  /**
+   * Perform an HTTP DELETE request and cache response
+   * @async
+   * @since 0.0.3
+   * @param {string} url - URL of request
+   * @param {string} id - Unique ID of request, used to retrieve results
+   * @param {...string} params - Parameters of request. Each request
+   * parameter should use two function parameters, the first the name
+   * of the parameter and the second it's value. The number of
+   * arguments in params should always be even.
+   */
+  async delete(url, id, ...params) {
+    await this._request('delete',
+                        url,
+                        id,
+                        undefined,
+                        this._wrapParams(params));
+  }
+
+  /**
+   * Perform an HTTP GET request and cache response
    * @async
    * @since 0.0.1
-   * @param {string} url - URL of resource to be requested
-   * @param {string} id - Unique ID used to refer to request and response
-   * @throws {IDInUseError} Thrown when a requested ID is already in use.
+   * @param {string} url - URL of request
+   * @param {string} id - Unique ID of request, used to retrieve results
+   * @param {...string} params - Parameters of request. Each request
+   * parameter should use two function parameters, the first the name
+   * of the parameter and the second it's value. The number of
+   * arguments in params should always be even.
    */
-  async get(url, id) {
+  async get(url, id, ...params) {
+    await this._request('get', url, id, undefined, this._wrapParams(params));
+  }
+
+  /**
+   * Perform an HTTP PATCH request and cache response
+   * @async
+   * @since 0.0.3
+   * @param {string} url - URL of request
+   * @param {string} id - Unique ID of request, used to retrieve results
+   * @param {Object} data - Data for request.
+   * @param {...string} params - Parameters of request. Each request
+   * parameter should use two function parameters, the first the name
+   * of the parameter and the second it's value. The number of
+   * arguments in params should always be even.
+   */
+  async patch(url, id, data, ...params) {
+    await this._request('patch', url, id, data, this._wrapParams(params));
+  }
+
+  /**
+   * Perform an HTTP POST request and cache response
+   * @async
+   * @since 0.0.3
+   * @param {string} url - URL of request
+   * @param {string} id - Unique ID of request, used to retrieve results
+   * @param {Object} data - Data for request.
+   * @param {...string} params - Parameters of request. Each request
+   * parameter should use two function parameters, the first the name
+   * of the parameter and the second it's value. The number of
+   * arguments in params should always be even.
+   */
+  async post(url, id, data, ...params) {
+    await this._request('post', url, id, data, this._wrapParams(params));
+  }
+
+  /**
+   * Perform an HTTP PUSH request and cache response
+   * @async
+   * @since 0.0.3
+   * @param {string} url - URL of request
+   * @param {string} id - Unique ID of request, used to retrieve results
+   * @param {Object} data - Data for request.
+   * @param {...string} params - Parameters of request. Each request
+   * parameter should use two function parameters, the first the name
+   * of the parameter and the second it's value. The number of
+   * arguments in params should always be even.
+   */
+  async push(url, id, data, ...params) {
+    await this._request('push', url, id, data, this._wrapParams(params));
+  }
+
+  /**
+   * Perform an axios request
+   * @async
+   * @private
+   * @since 0.0.3
+   * @param {string} method - HTTP method of request to performed
+   * (GET, POST, etc.)
+   * @param {string} url - URL of request
+   * @param {string} id - Unique ID of request, used to retrieve results
+   * @param {Object} data - Data for POST, PUT, and PATCH
+   * requests. Ignored for GET requests.
+   * @param {Object} params - Parameters of request. Each request
+   * parameter should use two function parameters, the first the name
+   * of the parameter and the second it's value. The number of
+   * arguments in params should always be even.
+   */
+  async _request(method, url, id, data, params) {
+
+    const config = {method: method,
+                    params: params,
+                    url: url,
+                    data: data};
+
     // id cannot be in use
     if (id in this.cachedResponses || id in this.inFlightRequests)
       throw new IDInUseError(`ID ${id} is already in use`);
 
     const caller = this; // store this for use in callbacks
     // cache id with promise
-    this.inFlightRequests[id] = axios.get(url)
+    this.inFlightRequests[id] = axios.request(config)
     // on success, set error to undefined, on failure set response to
     // undefined
       .then(function (response) {
@@ -82,6 +209,12 @@ class Requester {
       .catch(function (error) {
         caller.cachedResponses[id] = undefined;
         caller.cachedErrors[id] = error;
+        // throw error if set in options
+        if (caller._options.throwOnFailure) {
+          // control flow will never reach end of function if thrown
+          delete caller.inFlightRequests[id];
+          throw error;
+        }
       });
     await this.inFlightRequests[id];
 
@@ -168,6 +301,24 @@ class Requester {
     delete this.cachedResponses[id];
     return response;
   }
+
+  /** Set new options, or restore to defaults.
+  * @since 0.0.3
+  * @param {Object} options - Options passed in to function. Options
+  * not set in options will be left at current value. If options is an
+  * empty object, reset all options to defaults. If options is null,
+  * return a copy of the current options.
+  * @return {Object} Copy of options after any changes.
+  */
+  setOptions(options) {
+    // test for empty object
+    if (Object.keys(options).length === 0)
+      this._options = this._defaultOptions;
+    else if (options !== null)
+      this._options = Object.assign(this._options, options);
+
+    return {...this._options};
+  }
 }
 
 /**
@@ -177,4 +328,4 @@ const requester = new Requester();
 export default requester;
 
 //  LocalWords:  RequestNotCompleteError InvalidRequestError IDInUseError
-//  LocalWords:  idSerialNumber
+//  LocalWords:  idSerialNumber params

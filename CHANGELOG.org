@@ -3,6 +3,23 @@
 + made ~Requester~ instance ~requester~ the default export
 + remove ~Requester.httpGet~
 
+** New features
++ Added ~Requester.setOptions~ to set options for ~Requester~ class
++ Added option ~throwOnFailure~ to ~Requester~ class. If true, throws
+  the error received when a request fails. Default value is false.
++ Added ~UnbalancedParametersError~, thrown when an invalid parameter
+  list is passed to a request.
++ All ~Requester~ request methods can now take a list of request
+  parameters rather than hand coding them into the URL
++ Add ~delete~, ~patch~, ~post~, and ~push~ methods to ~Requester~.
+
+** Internal changes
++ Moved request logic into general method ~Requester._request~ that
+  can handle any request method.
+
+** Future plans
++ Give user the option of setting a timeout
+
 * Version 0.0.2
 Small update to remove documentation from the npm package and fix the
 example README.md
