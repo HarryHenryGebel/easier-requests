@@ -21,8 +21,6 @@ import {IDInUseError,
  * @since 0.0.0
  */
 class Requester {
-  // TODO implement general request function
-
   /**
    * Create a Requester
    * @since 0.0.0
