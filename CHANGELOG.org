@@ -10,6 +10,10 @@
 + Added ~UnbalancedParametersError~, thrown when an invalid parameter
   list is passed to a request.
 
+** Internal changes
++ Moved request logic into general method ~Requester._request~ that
+  can handle any request method.
+
 * Version 0.0.2
 Small update to remove documentation from the npm package and fix the
 example README.md
