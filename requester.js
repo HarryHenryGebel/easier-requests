@@ -29,15 +29,15 @@ class Requester {
    */
   constructor() {
     // holds responses awaiting retrieval
-    this.cachedResponses = {};
-    this.cachedErrors = {};
+    this._cachedResponses = {};
+    this._cachedErrors = {};
 
     // in flight request IDs
-    this.inFlightRequests = {};
+    this._inFlightRequests = {};
 
     // Updated every time a unique ID is generated, in order to help
     // ensure generated ids are in fact unique.
-    this.idSerialNumber = 0;
+    this._idSerialNumber = 0;
 
     this._defaultOptions = {
        // should we throw an error when a response fails?
@@ -60,9 +60,9 @@ class Requester {
    * a string prefix optionally provided by the user.
    */
   createUniqueID(prefix = '') {
-    this.idSerialNumber++;
+    this._idSerialNumber++;
 
-    return `${prefix}#${this.idSerialNumber}#${Date.now()}`;
+    return `${prefix}#${this._idSerialNumber}#${Date.now()}`;
   }
 
   /**
@@ -194,32 +194,32 @@ class Requester {
                     data: data};
 
     // id cannot be in use
-    if (id in this.cachedResponses || id in this.inFlightRequests)
+    if (id in this._cachedResponses || id in this._inFlightRequests)
       throw new IDInUseError(`ID ${id} is already in use`);
 
     const caller = this; // store this for use in callbacks
     // cache id with promise
-    this.inFlightRequests[id] = axios.request(config)
+    this._inFlightRequests[id] = axios.request(config)
     // on success, set error to undefined, on failure set response to
     // undefined
       .then(function (response) {
-        caller.cachedResponses[id] = response;
-        caller.cachedErrors[id] = undefined;
+        caller._cachedResponses[id] = response;
+        caller._cachedErrors[id] = undefined;
       })
       .catch(function (error) {
-        caller.cachedResponses[id] = undefined;
-        caller.cachedErrors[id] = error;
+        caller._cachedResponses[id] = undefined;
+        caller._cachedErrors[id] = error;
         // throw error if set in options
         if (caller._options.throwOnFailure) {
           // control flow will never reach end of function if thrown
-          delete caller.inFlightRequests[id];
+          delete caller._inFlightRequests[id];
           throw error;
         }
       });
-    await this.inFlightRequests[id];
+    await this._inFlightRequests[id];
 
     // get rid of cached ID since we are no longer in flight
-    delete this.inFlightRequests[id];
+    delete this._inFlightRequests[id];
   }
 
   /**
@@ -236,10 +236,10 @@ class Requester {
    * to prevent a memory leak on long running apps.
    */
   _responseErrorChecker(id) {
-    if (id in this.inFlightRequests)
+    if (id in this._inFlightRequests)
       throw new RequestNotCompleteError(
         `Request with ID ${id} has not completed.`);
-    if (!(id in this.cachedResponses) && !(id in this.inFlightRequests))
+    if (!(id in this._cachedResponses) && !(id in this._inFlightRequests))
       throw new InvalidRequestError(
         `Request with ID ${id}` +
           ' has already been retrieved or was never created.');
@@ -263,13 +263,13 @@ class Requester {
     // check for errors
     this._responseErrorChecker(id);
 
-    if (this.cachedErrors[id] === undefined)
+    if (this._cachedErrors[id] === undefined)
       // do not delete until the response is retrieved
       return undefined;
 
-    const errorReturned = this.cachedErrors[id];
-    delete this.cachedErrors[id];
-    delete this.cachedResponses[id];
+    const errorReturned = this._cachedErrors[id];
+    delete this._cachedErrors[id];
+    delete this._cachedResponses[id];
     return errorReturned;
   }
 
@@ -292,13 +292,13 @@ class Requester {
     this._responseErrorChecker(id);
 
 
-    if (this.cachedResponses[id] === undefined)
+    if (this._cachedResponses[id] === undefined)
       // do not delete until the error is retrieved
       return undefined;
 
-    const response = this.cachedResponses[id];
-    delete this.cachedErrors[id];
-    delete this.cachedResponses[id];
+    const response = this._cachedResponses[id];
+    delete this._cachedErrors[id];
+    delete this._cachedResponses[id];
     return response;
   }
 
