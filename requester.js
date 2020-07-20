@@ -71,7 +71,9 @@ class Requester {
    * parameter should use two function parameters, the first the name
    * of the parameter and the second it's value. The number of
    * arguments in params should always be even.
-   * @return {Object} Parameters wrapped into a params object suitable for passing to Requester._request.
+   * @return {Object} Parameters wrapped into a params object suitable
+   * for passing to Requester._request.
+   * @throws {UnbalancedParametersError}
    */
   _wrapParams(params) {
     // handle request parameters
