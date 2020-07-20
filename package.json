@@ -1,6 +1,6 @@
 {
   "name": "easier-requests",
-  "version": "0.0.3rc1",
+  "version": "0.0.3",
   "description": "Package to make it easier to write simple networking code. Targeted towards students and hobbyists, but hopefully useful to anyone.",
   "main": "requester.js",
   "type": "module",

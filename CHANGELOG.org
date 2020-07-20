@@ -17,6 +17,9 @@
 + Moved request logic into general method ~Requester._request~ that
   can handle any request method.
 
+** Future plans
++ Give user the option of setting a timeout
+
 * Version 0.0.2
 Small update to remove documentation from the npm package and fix the
 example README.md
