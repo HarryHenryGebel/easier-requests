@@ -38,6 +38,13 @@ class Requester {
     // Updated every time a unique ID is generated, in order to help
     // ensure generated ids are in fact unique.
     this.idSerialNumber = 0;
+
+    this._defaultOptions = {
+       // should we throw an error when a response fails?
+      throwOnFailure: false
+    };
+
+    this._options = this._defaultOptions;
   }
 
   /**
@@ -82,6 +89,9 @@ class Requester {
       .catch(function (error) {
         caller.cachedResponses[id] = undefined;
         caller.cachedErrors[id] = error;
+        // throw error if set in options
+        if (caller._options.throwOnFailure)
+          throw error;
       });
     await this.inFlightRequests[id];
 
@@ -167,6 +177,22 @@ class Requester {
     delete this.cachedErrors[id];
     delete this.cachedResponses[id];
     return response;
+  }
+
+  /** Set new options, or restore to defaults.
+  * @param {Object} options - Options passed in to function. Options
+  * not set in options will be left at current value. If options is an
+  * empty object, reset all options to defaults. If options is null,
+  * return a copy of the current options.
+  * @return {Object} Copy of options after any changes.
+  */
+  setOptions(options) {
+    if (options === {})
+      this._options = this._defaultOptions;
+    else if (options !== null)
+      this._options = Object.assign(this._options, options);
+
+    return [...this._options];
   }
 }
 
