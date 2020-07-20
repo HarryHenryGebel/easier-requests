@@ -7,6 +7,8 @@
 + Added ~Requester.setOptions~ to set options for ~Requester~ class
 + Added option ~throwOnFailure~ to ~Requester~ class. If true, throws
   the error received when a request fails. Default value is false.
++ Added ~UnbalancedParametersError~, thrown when an invalid parameter
+  list is passed to a request.
 
 * Version 0.0.2
 Small update to remove documentation from the npm package and fix the
