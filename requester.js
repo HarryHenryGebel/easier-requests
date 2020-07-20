@@ -89,7 +89,26 @@ class Requester {
   }
 
   /**
-   * Perform an HTTP get request and cache response
+   * Perform an HTTP DELETE request and cache response
+   * @async
+   * @since 0.0.3
+   * @param {string} url - URL of request
+   * @param {string} id - Unique ID of request, used to retrieve results
+   * @param {...string} params - Parameters of request. Each request
+   * parameter should use two function parameters, the first the name
+   * of the parameter and the second it's value. The number of
+   * arguments in params should always be even.
+   */
+  async delete(url, id, ...params) {
+    await this._request('delete',
+                        url,
+                        id,
+                        undefined,
+                        this._wrapParams(params));
+  }
+
+  /**
+   * Perform an HTTP GET request and cache response
    * @async
    * @since 0.0.1
    * @param {string} url - URL of request
@@ -100,7 +119,55 @@ class Requester {
    * arguments in params should always be even.
    */
   async get(url, id, ...params) {
-    await this._request('get', url, id, this._wrapParams(params));
+    await this._request('get', url, id, undefined, this._wrapParams(params));
+  }
+
+  /**
+   * Perform an HTTP PATCH request and cache response
+   * @async
+   * @since 0.0.3
+   * @param {string} url - URL of request
+   * @param {string} id - Unique ID of request, used to retrieve results
+   * @param {Object} data - Data for request.
+   * @param {...string} params - Parameters of request. Each request
+   * parameter should use two function parameters, the first the name
+   * of the parameter and the second it's value. The number of
+   * arguments in params should always be even.
+   */
+  async patch(url, id, data, ...params) {
+    await this._request('patch', url, id, data, this._wrapParams(params));
+  }
+
+  /**
+   * Perform an HTTP POST request and cache response
+   * @async
+   * @since 0.0.3
+   * @param {string} url - URL of request
+   * @param {string} id - Unique ID of request, used to retrieve results
+   * @param {Object} data - Data for request.
+   * @param {...string} params - Parameters of request. Each request
+   * parameter should use two function parameters, the first the name
+   * of the parameter and the second it's value. The number of
+   * arguments in params should always be even.
+   */
+  async post(url, id, data, ...params) {
+    await this._request('post', url, id, data, this._wrapParams(params));
+  }
+
+  /**
+   * Perform an HTTP PUSH request and cache response
+   * @async
+   * @since 0.0.3
+   * @param {string} url - URL of request
+   * @param {string} id - Unique ID of request, used to retrieve results
+   * @param {Object} data - Data for request.
+   * @param {...string} params - Parameters of request. Each request
+   * parameter should use two function parameters, the first the name
+   * of the parameter and the second it's value. The number of
+   * arguments in params should always be even.
+   */
+  async push(url, id, data, ...params) {
+    await this._request('push', url, id, data, this._wrapParams(params));
   }
 
   /**
@@ -112,16 +179,19 @@ class Requester {
    * (GET, POST, etc.)
    * @param {string} url - URL of request
    * @param {string} id - Unique ID of request, used to retrieve results
+   * @param {Object} data - Data for POST, PUT, and PATCH
+   * requests. Ignored for GET requests.
    * @param {Object} params - Parameters of request. Each request
    * parameter should use two function parameters, the first the name
    * of the parameter and the second it's value. The number of
    * arguments in params should always be even.
    */
-  async _request(method, url, id, params) {
+  async _request(method, url, id, data, params) {
 
     const config = {method: method,
                     params: params,
-                    url: url};
+                    url: url,
+                    data: data};
 
     // id cannot be in use
     if (id in this.cachedResponses || id in this.inFlightRequests)

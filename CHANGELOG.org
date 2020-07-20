@@ -9,6 +9,9 @@
   the error received when a request fails. Default value is false.
 + Added ~UnbalancedParametersError~, thrown when an invalid parameter
   list is passed to a request.
++ All ~Requester~ request methods can now take a list of request
+  parameters rather than hand coding them into the URL
++ Add ~delete~, ~patch~, ~post~, and ~push~ methods to ~Requester~.
 
 ** Internal changes
 + Moved request logic into general method ~Requester._request~ that
