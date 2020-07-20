@@ -44,7 +44,8 @@ class Requester {
       throwOnFailure: false
     };
 
-    this._options = this._defaultOptions;
+    // copy in order to preserve original
+    this._options = {...this._defaultOptions};
   }
 
   /**
@@ -187,12 +188,13 @@ class Requester {
   * @return {Object} Copy of options after any changes.
   */
   setOptions(options) {
-    if (options === {})
+    // test for empty object
+    if (Object.keys(options).length === 0)
       this._options = this._defaultOptions;
     else if (options !== null)
       this._options = Object.assign(this._options, options);
 
-    return [...this._options];
+    return {...this._options};
   }
 }
 
