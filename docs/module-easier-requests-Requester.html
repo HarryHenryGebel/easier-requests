@@ -27,7 +27,7 @@
 
 <nav >
     
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="module-easier-requests-Requester.html">Requester</a><ul class='methods'><li data-type='method'><a href="module-easier-requests-Requester.html#createUniqueID">createUniqueID</a></li><li data-type='method'><a href="module-easier-requests-Requester.html#error">error</a></li><li data-type='method'><a href="module-easier-requests-Requester.html#get">get</a></li><li data-type='method'><a href="module-easier-requests-Requester.html#httpGet">httpGet</a></li><li data-type='method'><a href="module-easier-requests-Requester.html#response">response</a></li></ul></li><li><a href="module-error.IDInUseError.html">IDInUseError</a></li><li><a href="module-error.InvalidRequestError.html">InvalidRequestError</a></li><li><a href="module-error.RequestNotCompleteError.html">RequestNotCompleteError</a></li></ul><h3>Modules</h3><ul><li><a href="module-easier-requests.html">easier-requests</a></li><li><a href="module-error.html">error</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="module-easier-requests-Requester.html">Requester</a><ul class='methods'><li data-type='method'><a href="module-easier-requests-Requester.html#createUniqueID">createUniqueID</a></li><li data-type='method'><a href="module-easier-requests-Requester.html#delete">delete</a></li><li data-type='method'><a href="module-easier-requests-Requester.html#error">error</a></li><li data-type='method'><a href="module-easier-requests-Requester.html#get">get</a></li><li data-type='method'><a href="module-easier-requests-Requester.html#patch">patch</a></li><li data-type='method'><a href="module-easier-requests-Requester.html#post">post</a></li><li data-type='method'><a href="module-easier-requests-Requester.html#push">push</a></li><li data-type='method'><a href="module-easier-requests-Requester.html#response">response</a></li><li data-type='method'><a href="module-easier-requests-Requester.html#setOptions">setOptions</a></li></ul></li><li><a href="module-error.IDInUseError.html">IDInUseError</a></li><li><a href="module-error.InvalidRequestError.html">InvalidRequestError</a></li><li><a href="module-error.RequestNotCompleteError.html">RequestNotCompleteError</a></li><li><a href="module-error.UnbalancedParametersError.html">UnbalancedParametersError</a></li></ul><h3>Modules</h3><ul><li><a href="module-easier-requests.html">easier-requests</a></li><li><a href="module-error.html">error</a></li></ul>
 </nav>
 
 <div id="main">
@@ -189,7 +189,7 @@ responses for later retrieval.</div>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="requester.js.html">requester.js</a>, <a href="requester.js.html#line54">line 54</a>
+        <a href="requester.js.html">requester.js</a>, <a href="requester.js.html#line62">line 62</a>
     </li></ul></dd>
     
 
@@ -363,6 +363,222 @@ a string prefix optionally provided by the user.
 
     
 
+    <h4 class="name" id="delete"><span class="type-signature">(async) </span>delete<span class="signature">(url, id, &hellip;params)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="requester.js.html">requester.js</a>, <a href="requester.js.html#line102">line 102</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+    <dt class="tag-since">Since:</dt>
+    <dd class="tag-since"><ul class="dummy"><li>0.0.3</li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    Perform an HTTP DELETE request and cache response
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>url</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">URL of request</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Unique ID of request, used to retrieve results</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>params</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                    &lt;repeatable><br>
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Parameters of request. Each request
+parameter should use two function parameters, the first the name
+of the parameter and the second it's value. The number of
+arguments in params should always be even.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
     <h4 class="name" id="error"><span class="type-signature"></span>error<span class="signature">(id)</span><span class="type-signature"> &rarr; {Object}</span></h4>
 
     
@@ -375,7 +591,7 @@ a string prefix optionally provided by the user.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="requester.js.html">requester.js</a>, <a href="requester.js.html#line129">line 129</a>
+        <a href="requester.js.html">requester.js</a>, <a href="requester.js.html#line262">line 262</a>
     </li></ul></dd>
     
 
@@ -586,7 +802,7 @@ if the request succeeded.
 
     
 
-    <h4 class="name" id="get"><span class="type-signature">(async) </span>get<span class="signature">(url, id)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="get"><span class="type-signature">(async) </span>get<span class="signature">(url, id, &hellip;params)</span><span class="type-signature"></span></h4>
 
     
 
@@ -598,7 +814,7 @@ if the request succeeded.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="requester.js.html">requester.js</a>, <a href="requester.js.html#line68">line 68</a>
+        <a href="requester.js.html">requester.js</a>, <a href="requester.js.html#line121">line 121</a>
     </li></ul></dd>
     
 
@@ -641,7 +857,7 @@ if the request succeeded.
 
 
 <div class="description usertext">
-    Perform an HTTP get request and cache response
+    Perform an HTTP GET request and cache response
 </div>
 
 
@@ -666,6 +882,8 @@ if the request succeeded.
 
         <th>Type</th>
 
+        
+        <th>Attributes</th>
         
 
         
@@ -692,10 +910,18 @@ if the request succeeded.
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
-            <td class="description last">URL of resource to be requested</td>
+            <td class="description last">URL of request</td>
         </tr>
 
     
@@ -715,10 +941,54 @@ if the request succeeded.
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
-            <td class="description last">Unique ID used to refer to request and response</td>
+            <td class="description last">Unique ID of request, used to retrieve results</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>params</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                    &lt;repeatable><br>
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Parameters of request. Each request
+parameter should use two function parameters, the first the name
+of the parameter and the second it's value. The number of
+arguments in params should always be even.</td>
         </tr>
 
     
@@ -738,35 +1008,6 @@ if the request succeeded.
 
 
 
-<h5>Throws:</h5>
-
-        
-
-<dl>
-    <dt>
-        <div class="param-desc usertext">
-        Thrown when a requested ID is already in use.
-        </div>
-    </dt>
-    <dd></dd>
-    <dt>
-        <dl class="param-type">
-            <dt>
-                Type
-            </dt>
-            <dd>
-                
-<span class="param-type">IDInUseError</span>
-
-
-            </dd>
-        </dl>
-    </dt>
-    <dd></dd>
-</dl>
-
-
-    
 
 
 
@@ -777,7 +1018,7 @@ if the request succeeded.
 
     
 
-    <h4 class="name" id="httpGet"><span class="type-signature">(async) </span>httpGet<span class="signature">(url, id)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="patch"><span class="type-signature">(async) </span>patch<span class="signature">(url, id, data, &hellip;params)</span><span class="type-signature"></span></h4>
 
     
 
@@ -789,7 +1030,7 @@ if the request succeeded.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="requester.js.html">requester.js</a>, <a href="requester.js.html#line181">line 181</a>
+        <a href="requester.js.html">requester.js</a>, <a href="requester.js.html#line137">line 137</a>
     </li></ul></dd>
     
 
@@ -797,7 +1038,7 @@ if the request succeeded.
 
     
     <dt class="tag-since">Since:</dt>
-    <dd class="tag-since"><ul class="dummy"><li>0.0.0</li></ul></dd>
+    <dd class="tag-since"><ul class="dummy"><li>0.0.3</li></ul></dd>
     
 
     
@@ -810,8 +1051,6 @@ if the request succeeded.
 
     
 
-    
-        <dt class="important tag-deprecated">Deprecated:</dt><dd><ul class="dummy"><li>since 0.0.1 - will not be included in 1.0.0</li></ul></dd>
     
 
     
@@ -834,7 +1073,7 @@ if the request succeeded.
 
 
 <div class="description usertext">
-    Perform an HTTP get request and cache response
+    Perform an HTTP PATCH request and cache response
 </div>
 
 
@@ -859,6 +1098,8 @@ if the request succeeded.
 
         <th>Type</th>
 
+        
+        <th>Attributes</th>
         
 
         
@@ -885,10 +1126,18 @@ if the request succeeded.
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
-            <td class="description last">URL of resource to be requested</td>
+            <td class="description last">URL of request</td>
         </tr>
 
     
@@ -908,10 +1157,85 @@ if the request succeeded.
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
-            <td class="description last">Unique ID used to refer to request and response</td>
+            <td class="description last">Unique ID of request, used to retrieve results</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>data</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Data for request.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>params</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                    &lt;repeatable><br>
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Parameters of request. Each request
+parameter should use two function parameters, the first the name
+of the parameter and the second it's value. The number of
+arguments in params should always be even.</td>
         </tr>
 
     
@@ -931,35 +1255,500 @@ if the request succeeded.
 
 
 
-<h5>Throws:</h5>
+
+
+
+
 
         
+            
 
-<dl>
-    <dt>
-        <div class="param-desc usertext">
-        Thrown when a requested ID is already in use.
-        </div>
-    </dt>
-    <dd></dd>
-    <dt>
-        <dl class="param-type">
-            <dt>
-                Type
-            </dt>
-            <dd>
-                
-<span class="param-type">IDInUseError</span>
+    
+
+    <h4 class="name" id="post"><span class="type-signature">(async) </span>post<span class="signature">(url, id, data, &hellip;params)</span><span class="type-signature"></span></h4>
+
+    
 
 
-            </dd>
-        </dl>
-    </dt>
-    <dd></dd>
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="requester.js.html">requester.js</a>, <a href="requester.js.html#line153">line 153</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+    <dt class="tag-since">Since:</dt>
+    <dd class="tag-since"><ul class="dummy"><li>0.0.3</li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
 </dl>
 
 
+
+
+
+<div class="description usertext">
+    Perform an HTTP POST request and cache response
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
     
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>url</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">URL of request</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Unique ID of request, used to retrieve results</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>data</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Data for request.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>params</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                    &lt;repeatable><br>
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Parameters of request. Each request
+parameter should use two function parameters, the first the name
+of the parameter and the second it's value. The number of
+arguments in params should always be even.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="push"><span class="type-signature">(async) </span>push<span class="signature">(url, id, data, &hellip;params)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="requester.js.html">requester.js</a>, <a href="requester.js.html#line169">line 169</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+    <dt class="tag-since">Since:</dt>
+    <dd class="tag-since"><ul class="dummy"><li>0.0.3</li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    Perform an HTTP PUSH request and cache response
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>url</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">URL of request</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Unique ID of request, used to retrieve results</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>data</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Data for request.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>params</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                    &lt;repeatable><br>
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Parameters of request. Each request
+parameter should use two function parameters, the first the name
+of the parameter and the second it's value. The number of
+arguments in params should always be even.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -982,7 +1771,7 @@ if the request succeeded.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="requester.js.html">requester.js</a>, <a href="requester.js.html#line157">line 157</a>
+        <a href="requester.js.html">requester.js</a>, <a href="requester.js.html#line290">line 290</a>
     </li></ul></dd>
     
 
@@ -1189,6 +1978,170 @@ if the request failed.
 
 
         
+            
+
+    
+
+    <h4 class="name" id="setOptions"><span class="type-signature"></span>setOptions<span class="signature">(options)</span><span class="type-signature"> &rarr; {Object}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="requester.js.html">requester.js</a>, <a href="requester.js.html#line313">line 313</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+    <dt class="tag-since">Since:</dt>
+    <dd class="tag-since"><ul class="dummy"><li>0.0.3</li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    Set new options, or restore to defaults.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Options passed in to function. Options
+not set in options will be left at current value. If options is an
+empty object, reset all options to defaults. If options is null,
+return a copy of the current options.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Copy of options after any changes.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
     
 
     
@@ -1208,7 +2161,7 @@ if the request failed.
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a> on Sun Jul 12 2020 10:44:57 GMT-0400 (Eastern Daylight Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a> on Mon Jul 20 2020 02:26:49 GMT-0400 (Eastern Daylight Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>
