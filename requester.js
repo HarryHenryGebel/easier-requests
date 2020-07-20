@@ -12,7 +12,8 @@
 import axios from 'axios';
 import {IDInUseError,
         RequestNotCompleteError,
-        InvalidRequestError} from './errors';
+        InvalidRequestError,
+        UnbalancedParametersError} from './errors';
 
 // TODO allow user to set option to throw error on failed requests
 /**
