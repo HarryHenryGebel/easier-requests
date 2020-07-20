@@ -199,7 +199,8 @@ class Requester {
 }
 
 /**
- * Preconstructed Requester() instance. Requester is designed to be used primarily from this exported instance.
+ * Preconstructed Requester() instance. Requester is designed to be
+ * used primarily from this exported instance.
  */
 const requester = new Requester();
 export default requester;
