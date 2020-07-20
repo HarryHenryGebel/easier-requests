@@ -29,7 +29,7 @@ npm i easier-requests
 
 ```js
 // Import requester instance from easier-requests module
-import {requester} from "easier-requests";
+import requester from "easier-requests";
 
 // Requester.get() is designed to be used in an async function
 async function makeCards() {
