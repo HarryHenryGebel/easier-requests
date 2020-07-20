@@ -67,6 +67,29 @@ class Requester {
   }
 
   /**
+   * Wrap variable parameters into a params object
+   * @private
+   * @since 0.0.3
+   * @param {string[]} params - Parameters of request. Each request
+   * parameter should use two function parameters, the first the name
+   * of the parameter and the second it's value. The number of
+   * arguments in params should always be even.
+   * @return {Object} Parameters wrapped into a params object suitable for passing to Requester._request.
+   */
+  _wrapParams(params) {
+    // handle request parameters
+    if (params.length % 2 != 0)
+      throw new UnbalancedParametersError(
+        "Each request parameter must have a parameter name and a value.");
+
+    const parameters = {}; // gather params into object
+    for (let i = 0; i < params.length; i += 2)
+      parameters[params[i]] = params[i + 1];
+
+    return parameters;
+  }
+
+  /**
    * Perform an HTTP get request and cache response
    * @async
    * @since 0.0.1
