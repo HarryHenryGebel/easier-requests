@@ -1,3 +1,13 @@
+* Version 0.0.4
+** Breaking changes
++ Option ~throwOnFailure~ is true by default
+
+** Fixes
++ Numerous documentation fixes
+
+** Internal changes
++ Marked all ~Requester~ class properties as private
+
 * Version 0.0.3
 ** Breaking changes
 + made ~Requester~ instance ~requester~ the default export
