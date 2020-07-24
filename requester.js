@@ -39,7 +39,7 @@ class Requester {
 
     this._defaultOptions = {
        // should we throw an error when a response fails?
-      throwOnFailure: false
+      throwOnFailure: true
     };
 
     // copy in order to preserve original

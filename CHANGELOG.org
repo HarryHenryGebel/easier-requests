@@ -1,4 +1,7 @@
 * Version 0.0.4
+** Breaking changes
++ Option ~throwOnFailure~ is true by default
+
 ** Fixes
 + Numerous documentation fixes
 
