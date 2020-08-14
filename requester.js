@@ -77,7 +77,7 @@ class Requester {
    * @throws {UnbalancedParametersError}
    */
   _wrapParams(params) {
-    if (typeof(params[0] === "string")) {
+    if (typeof(params[0]) === "string") {
       // handle request parameters
       if (params.length % 2 != 0)
         throw new UnbalancedParametersError(
