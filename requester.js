@@ -76,16 +76,21 @@ class Requester {
    * @throws {UnbalancedParametersError}
    */
   _wrapParams(params) {
-    // handle request parameters
-    if (params.length % 2 != 0)
-      throw new UnbalancedParametersError(
-        "Each request parameter must have a parameter name and a value.");
+    if (Array.isArray(params)) {
+      // handle request parameters
+      if (params.length % 2 != 0)
+        throw new UnbalancedParametersError(
+          "Each request parameter must have a parameter name and a value.");
 
-    const parameters = {}; // gather params into object
-    for (let i = 0; i < params.length; i += 2)
-      parameters[params[i]] = params[i + 1];
+      const parameters = {}; // gather params into object
+      for (let i = 0; i < params.length; i += 2)
+        parameters[params[i]] = params[i + 1];
 
-    return parameters;
+      return parameters;
+    }
+    else {
+      return params;
+    }
   }
 
   /**
@@ -322,7 +327,8 @@ class Requester {
 }
 
 /**
- * Preconstructed Requester() instance. Requester is designed to be used primarily from this exported instance.
+ * Preconstructed Requester() instance. Requester is designed to be
+ * used primarily from this exported instance.
  */
 const requester = new Requester();
 export default requester;
