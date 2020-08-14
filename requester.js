@@ -64,19 +64,20 @@ class Requester {
   }
 
   /**
-   * Wrap variable parameters into a params object
+   * Parse variable parameters into a params object
    * @private
    * @since 0.0.3
-   * @param {string[]} params - Parameters of request. Each request
+   * @param {Array} params - Parameters of request. Each request
    * parameter should use two function parameters, the first the name
    * of the parameter and the second it's value. The number of
-   * arguments in params should always be even.
+   * arguments in params should always be even. If the first parameter is
+   * not a string, return the first parameter.
    * @return {Object} Parameters wrapped into a params object suitable
    * for passing to Requester._request.
    * @throws {UnbalancedParametersError}
    */
   _wrapParams(params) {
-    if (Array.isArray(params)) {
+    if (typeof(params[0] === "string")) {
       // handle request parameters
       if (params.length % 2 != 0)
         throw new UnbalancedParametersError(
@@ -89,7 +90,7 @@ class Requester {
       return parameters;
     }
     else {
-      return params;
+      return params[0];
     }
   }
 
