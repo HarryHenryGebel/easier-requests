@@ -197,7 +197,7 @@ class Requester {
       params: params,
       url: url,
       data: data,
-      headers: this.options.headers,
+      headers: this._options.headers,
     };
 
     // id cannot be in use
