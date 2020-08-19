@@ -41,6 +41,7 @@ class Requester {
 
     this._defaultOptions = {
       // should we throw an error when a response fails?
+      headers: {},
       throwOnFailure: true,
     };
 
@@ -190,8 +191,14 @@ class Requester {
    * of the parameter and the second it's value. The number of
    * arguments in params should always be even.
    */
-  async _request(method, url, id, data, params) {
-    const config = { method: method, params: params, url: url, data: data };
+  async _request(method, url, id, data, headers, params) {
+    const config = {
+      method: method,
+      params: params,
+      url: url,
+      data: data,
+      headers: this.options.headers,
+    };
 
     // id cannot be in use
     if (id in this._cachedResponses || id in this._inFlightRequests)
