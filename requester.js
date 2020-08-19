@@ -7,13 +7,15 @@
  * @module easier-requests
  * @since 0.0.0
  */
-'use strict';
+"use strict";
 
-import axios from 'axios';
-import {IDInUseError,
-        RequestNotCompleteError,
-        InvalidRequestError,
-        UnbalancedParametersError} from './errors';
+import axios from "axios";
+import {
+  IDInUseError,
+  RequestNotCompleteError,
+  InvalidRequestError,
+  UnbalancedParametersError,
+} from "./errors";
 
 /**
  * Class representing actions to perform HTTP requests and cache their
@@ -38,12 +40,12 @@ class Requester {
     this._idSerialNumber = 0;
 
     this._defaultOptions = {
-       // should we throw an error when a response fails?
-      throwOnFailure: true
+      // should we throw an error when a response fails?
+      throwOnFailure: true,
     };
 
     // copy in order to preserve original
-    this._options = {...this._defaultOptions};
+    this._options = { ...this._defaultOptions };
   }
 
   /**
@@ -57,7 +59,7 @@ class Requester {
    * format "${prefix}#${serial number}#${timestamp}", where prefix is
    * a string prefix optionally provided by the user.
    */
-  createUniqueID(prefix = '') {
+  createUniqueID(prefix = "") {
     this._idSerialNumber++;
 
     return `${prefix}#${this._idSerialNumber}#${Date.now()}`;
@@ -77,19 +79,19 @@ class Requester {
    * @throws {UnbalancedParametersError}
    */
   _wrapParams(params) {
-    if (typeof(params[0]) === "string") {
+    if (typeof params[0] === "string") {
       // handle request parameters
       if (params.length % 2 != 0)
         throw new UnbalancedParametersError(
-          "Each request parameter must have a parameter name and a value.");
+          "Each request parameter must have a parameter name and a value."
+        );
 
       const parameters = {}; // gather params into object
       for (let i = 0; i < params.length; i += 2)
         parameters[params[i]] = params[i + 1];
 
       return parameters;
-    }
-    else {
+    } else {
       return params[0];
     }
   }
@@ -106,11 +108,7 @@ class Requester {
    * arguments in params should always be even.
    */
   async delete(url, id, ...params) {
-    await this._request('delete',
-                        url,
-                        id,
-                        undefined,
-                        this._wrapParams(params));
+    await this._request("delete", url, id, undefined, this._wrapParams(params));
   }
 
   /**
@@ -125,7 +123,7 @@ class Requester {
    * arguments in params should always be even.
    */
   async get(url, id, ...params) {
-    await this._request('get', url, id, undefined, this._wrapParams(params));
+    await this._request("get", url, id, undefined, this._wrapParams(params));
   }
 
   /**
@@ -141,7 +139,7 @@ class Requester {
    * arguments in params should always be even.
    */
   async patch(url, id, data, ...params) {
-    await this._request('patch', url, id, data, this._wrapParams(params));
+    await this._request("patch", url, id, data, this._wrapParams(params));
   }
 
   /**
@@ -157,7 +155,7 @@ class Requester {
    * arguments in params should always be even.
    */
   async post(url, id, data, ...params) {
-    await this._request('post', url, id, data, this._wrapParams(params));
+    await this._request("post", url, id, data, this._wrapParams(params));
   }
 
   /**
@@ -173,7 +171,7 @@ class Requester {
    * arguments in params should always be even.
    */
   async push(url, id, data, ...params) {
-    await this._request('push', url, id, data, this._wrapParams(params));
+    await this._request("push", url, id, data, this._wrapParams(params));
   }
 
   /**
@@ -193,11 +191,7 @@ class Requester {
    * arguments in params should always be even.
    */
   async _request(method, url, id, data, params) {
-
-    const config = {method: method,
-                    params: params,
-                    url: url,
-                    data: data};
+    const config = { method: method, params: params, url: url, data: data };
 
     // id cannot be in use
     if (id in this._cachedResponses || id in this._inFlightRequests)
@@ -205,9 +199,10 @@ class Requester {
 
     const caller = this; // store this for use in callbacks
     // cache id with promise
-    this._inFlightRequests[id] = axios.request(config)
-    // on success, set error to undefined, on failure set response to
-    // undefined
+    this._inFlightRequests[id] = axios
+      .request(config)
+      // on success, set error to undefined, on failure set response to
+      // undefined
       .then(function (response) {
         caller._cachedResponses[id] = response;
         caller._cachedErrors[id] = undefined;
@@ -244,11 +239,13 @@ class Requester {
   _responseErrorChecker(id) {
     if (id in this._inFlightRequests)
       throw new RequestNotCompleteError(
-        `Request with ID ${id} has not completed.`);
+        `Request with ID ${id} has not completed.`
+      );
     if (!(id in this._cachedResponses) && !(id in this._inFlightRequests))
       throw new InvalidRequestError(
         `Request with ID ${id}` +
-          ' has already been retrieved or was never created.');
+          " has already been retrieved or was never created."
+      );
   }
 
   /**
@@ -297,7 +294,6 @@ class Requester {
     // check for errors
     this._responseErrorChecker(id);
 
-
     if (this._cachedResponses[id] === undefined)
       // do not delete until the error is retrieved
       return undefined;
@@ -309,21 +305,20 @@ class Requester {
   }
 
   /** Set new options, or restore to defaults.
-  * @since 0.0.3
-  * @param {Object} options - Options passed in to function. Options
-  * not set in options will be left at current value. If options is an
-  * empty object, reset all options to defaults. If options is null,
-  * return a copy of the current options.
-  * @return {Object} Copy of options after any changes.
-  */
+   * @since 0.0.3
+   * @param {Object} options - Options passed in to function. Options
+   * not set in options will be left at current value. If options is an
+   * empty object, reset all options to defaults. If options is null,
+   * return a copy of the current options.
+   * @return {Object} Copy of options after any changes.
+   */
   setOptions(options) {
     // test for empty object
-    if (Object.keys(options).length === 0)
-      this._options = this._defaultOptions;
+    if (Object.keys(options).length === 0) this._options = this._defaultOptions;
     else if (options !== null)
       this._options = Object.assign(this._options, options);
 
-    return {...this._options};
+    return { ...this._options };
   }
 }
 
