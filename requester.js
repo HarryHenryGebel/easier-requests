@@ -176,6 +176,22 @@ class Requester {
   }
 
   /**
+   * Perform an HTTP PUT request and cache response
+   * @async
+   * @since 0.0.5
+   * @param {string} url - URL of request
+   * @param {string} id - Unique ID of request, used to retrieve results
+   * @param {Object} data - Data for request.
+   * @param {...string} params - Parameters of request. Each request
+   * parameter should use two function parameters, the first the name
+   * of the parameter and the second it's value. The number of
+   * arguments in params should always be even.
+   */
+  async put(url, id, data, ...params) {
+    await this._request("push", url, id, data, this._wrapParams(params));
+  }
+
+  /**
    * Perform an axios request
    * @async
    * @private
